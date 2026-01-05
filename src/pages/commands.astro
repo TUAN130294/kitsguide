@@ -125,8 +125,9 @@ import { commands, categories } from '../data/commands';
                                         <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Active Agents</div>
                                         <div class="flex flex-wrap gap-1.5">
                                         {cmd.agents.length > 0 ? cmd.agents.map((agent) => (
-                                            <a href={`/agents#${agent}`} class="group/tag relative inline-flex items-center justify-center w-8 h-8 rounded-full bg-neon-purple/10 border border-neon-purple/20 text-neon-purple hover:bg-neon-purple hover:text-black transition-all" title={agent}>
-                                                <span class="text-xs font-bold">{agent[0].toUpperCase()}</span>
+                                            <a href={`/agents#${agent}`} class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neon-purple/10 border border-neon-purple/20 text-neon-purple hover:bg-neon-purple hover:text-black transition-all">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
+                                                <span class="text-xs font-medium capitalize">{agent}</span>
                                             </a>
                                         )) : (
                                             <span class="text-xs text-gray-600 italic">No agents</span>
