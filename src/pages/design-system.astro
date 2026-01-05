@@ -1,0 +1,280 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Design System" description="Bộ công cụ thiết kế và hướng dẫn phát triển giao diện ClaudeKit">
+  <div class="relative min-h-screen">
+      <!-- Background elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-neon-purple/10 rounded-full blur-[100px] opacity-30"></div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-neon-cyan/10 rounded-full blur-[100px] opacity-30"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 py-16 relative z-10">
+      
+      <!-- Header -->
+      <div class="text-center mb-20">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neon-purple/10 border border-neon-purple/30 text-neon-purple text-xs font-semibold tracking-wider uppercase mb-6">
+          Encyclopedia UI/UX
+        </div>
+        <h1 class="text-5xl md:text-7xl font-bold mb-6">
+          <span class="text-white">ClaudeKit</span>
+          <span class="gradient-text">Design System</span>
+        </h1>
+        <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+          Bộ tài liệu toàn diện về ngôn ngữ thiết kế, components và patterns. 
+          Từ "Bootstrap mindset" đến "Modern Utility-first CSS".
+        </p>
+      </div>
+
+      <!-- Navigation for the doc -->
+      <div class="flex flex-wrap gap-4 justify-center mb-16">
+        <a href="#tokens" class="px-5 py-2.5 rounded-lg bg-dark-card border border-dark-border text-gray-300 hover:text-white hover:border-neon-cyan/50 hover:bg-dark-hover transition-all">Design Tokens</a>
+        <a href="#components" class="px-5 py-2.5 rounded-lg bg-dark-card border border-dark-border text-gray-300 hover:text-white hover:border-neon-cyan/50 hover:bg-dark-hover transition-all">Components</a>
+        <a href="#migration" class="px-5 py-2.5 rounded-lg bg-dark-card border border-dark-border text-gray-300 hover:text-white hover:border-neon-cyan/50 hover:bg-dark-hover transition-all">Bootstrap => Code</a>
+        <a href="#patterns" class="px-5 py-2.5 rounded-lg bg-dark-card border border-dark-border text-gray-300 hover:text-white hover:border-neon-cyan/50 hover:bg-dark-hover transition-all">Project Patterns</a>
+      </div>
+
+      <!-- SECTION: DESIGN TOKENS -->
+      <section id="tokens" class="mb-24 scroll-mt-24">
+        <h2 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+          <span class="w-8 h-8 rounded-lg bg-neon-cyan flex items-center justify-center text-dark-bg text-lg font-bold">1</span>
+          Design Tokens
+        </h2>
+        
+        <div class="grid md:grid-cols-2 gap-12">
+            <!-- Colors -->
+            <div class="p-8 rounded-2xl bg-dark-card border border-dark-border/50">
+                <h3 class="text-xl font-semibold text-white mb-6">Brand Palette</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-20 h-20 rounded-xl bg-neon-cyan shadow-[0_0_20px_rgba(0,245,255,0.3)]"></div>
+                        <div>
+                            <p class="text-white font-mono">var(--neon-cyan)</p>
+                            <p class="text-gray-500 text-sm">#00f5ff</p>
+                            <p class="text-gray-500 text-sm">Primary Action, Highlights</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-20 h-20 rounded-xl bg-neon-purple shadow-[0_0_20px_rgba(191,0,255,0.3)]"></div>
+                        <div>
+                            <p class="text-white font-mono">var(--neon-purple)</p>
+                            <p class="text-gray-500 text-sm">#bf00ff</p>
+                            <p class="text-gray-500 text-sm">Secondary, Creativity</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-20 h-20 rounded-xl bg-neon-pink shadow-[0_0_20px_rgba(255,0,212,0.3)]"></div>
+                        <div>
+                            <p class="text-white font-mono">var(--neon-pink)</p>
+                            <p class="text-gray-500 text-sm">#ff00d4</p>
+                            <p class="text-gray-500 text-sm">Accents, Energy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typography & Effects -->
+            <div class="p-8 rounded-2xl bg-dark-card border border-dark-border/50">
+                <h3 class="text-xl font-semibold text-white mb-6">Typography & Effects</h3>
+                <div class="space-y-8">
+                    <div>
+                        <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-neon-cyan to-neon-purple mb-2">Gradient Heading</h1>
+                        <p class="text-gray-400">Class: <code class="text-neon-cyan text-sm">.gradient-text</code></p>
+                    </div>
+                    <div>
+                        <p class="text-neon-cyan glow-text-cyan text-2xl font-bold">Neon Glow Text</p>
+                        <p class="text-gray-400">Class: <code class="text-neon-cyan text-sm">.glow-text-cyan</code></p>
+                    </div>
+                    <div class="p-6 rounded-xl bg-dark-bg/50 backdrop-blur-md border border-white/10">
+                        <p class="text-white">Glassmorphism Card Overlay</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </section>
+
+      <!-- SECTION: COMPONENTS -->
+      <section id="components" class="mb-24 scroll-mt-24">
+        <h2 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+          <span class="w-8 h-8 rounded-lg bg-neon-purple flex items-center justify-center text-white text-lg font-bold">2</span>
+          UI Components
+        </h2>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Buttons -->
+            <div class="col-span-1 p-6 rounded-2xl bg-dark-card border border-dark-border">
+                <h3 class="text-lg font-semibold text-gray-300 mb-4">Buttons</h3>
+                <div class="space-y-4 flex flex-col items-start">
+                    <button class="px-6 py-3 rounded-xl bg-gradient-to-r from-neon-cyan to-neon-purple text-white font-semibold shadow-lg shadow-neon-cyan/20 hover:shadow-neon-cyan/40 hover:-translate-y-1 transition-all duration-300">
+                        Primary Glow
+                    </button>
+                    <button class="px-6 py-3 rounded-xl border border-neon-cyan/30 bg-neon-cyan/5 text-neon-cyan font-semibold hover:bg-neon-cyan/10 transition-all">
+                        Secondary Outline
+                    </button>
+                    <button class="px-6 py-3 rounded-xl bg-dark-hover text-gray-300 hover:text-white transition-all">
+                        Ghost / Tertiary
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cards -->
+            <div class="col-span-2 p-6 rounded-2xl bg-dark-card border border-dark-border">
+                <h3 class="text-lg font-semibold text-gray-300 mb-4">Cards (Interactive)</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- Standard Card -->
+                    <div class="p-6 rounded-xl bg-dark-bg border border-dark-border hover:border-neon-cyan/50 transition-colors group cursor-pointer">
+                        <div class="w-10 h-10 rounded-lg bg-dark-hover flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-neon-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        </div>
+                        <h4 class="text-white font-semibold mb-2">Standard Card</h4>
+                        <p class="text-gray-500 text-sm">Hover for border effect.</p>
+                    </div>
+
+                    <!-- Gradient Border Card -->
+                    <div class="gradient-border p-[1px] rounded-xl hover:-translate-y-1 transition-transform cursor-pointer">
+                        <div class="h-full bg-dark-card rounded-xl p-6 relative z-10">
+                            <h4 class="gradient-text font-bold text-lg mb-2">Rainbow Border</h4>
+                            <p class="text-gray-400 text-sm">Uses <code class="text-xs bg-black/30 p-1 rounded">.gradient-border</code> class with pseudo-element animation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </section>
+
+      <!-- SECTION: MIGRATION -->
+      <section id="migration" class="mb-24 scroll-mt-24">
+         <h2 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+          <span class="w-8 h-8 rounded-lg bg-neon-pink flex items-center justify-center text-white text-lg font-bold">3</span>
+          Bootstrap => Code Strategy
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-8 items-start">
+            <div class="space-y-6">
+                <div class="p-6 rounded-2xl bg-dark-card border border-dark-border">
+                    <h3 class="text-xl font-bold text-white mb-4">The Mindset Shift</h3>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3">
+                            <span class="text-red-500 font-bold">✖</span>
+                            <div class="text-gray-400">
+                                <strong class="text-gray-300">Bootstrap:</strong> Dựa vào pre-built components (btn-primary, card). Khó tùy biến sâu, trông "giống nhau".
+                            </div>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="text-neon-cyan font-bold">✔</span>
+                            <div class="text-gray-400">
+                                <strong class="text-white">ClaudeKit (Tailwind):</strong> Dựa vào Utilities. Tự do sáng tạo "trên từng pixel" nhưng vẫn giữ consistency qua Design Tokens.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-dark-card border border-dark-border">
+                    <h3 class="text-xl font-bold text-white mb-4">Migration Workflow</h3>
+                    <ol class="list-decimal list-inside space-y-3 text-gray-400">
+                        <li><strong class="text-white">Audit:</strong> Liệt kê các thành phần UI hiện tại.</li>
+                        <li><strong class="text-white">Tokenize:</strong> Define màu sắc, spacing vào `global.css` hoặc `tailwind.config`.</li>
+                        <li><strong class="text-white">Componentize:</strong> Tạo các React/Astro/Vue components thay thế cho class Bootstrap (VD: `&lt;Button /&gt;` thay vì class string).</li>
+                        <li><strong class="text-white">Remove:</strong> Xóa import bootstrap css.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Code Comparison -->
+            <div class="p-6 rounded-2xl bg-[#1e1e1e] border border-gray-800 font-mono text-sm overflow-x-auto shadow-2xl">
+                <div class="mb-6">
+                    <p class="text-gray-500 mb-2">// Bootstrap Way (Old)</p>
+                    <div class="text-blue-300">
+                        &lt;button class="btn btn-primary btn-lg"&gt;<br/>
+                        &nbsp;&nbsp;Click Me<br/>
+                        &lt;/button&gt;
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-700 my-4"></div>
+
+                <div>
+                    <p class="text-gray-500 mb-2">// ClaudeKit Way (Modern)</p>
+                    <div class="text-green-300">
+                        &lt;button class="<span class="text-yellow-300">px-6 py-3 rounded-xl bg-gradient-to-r from-neon-cyan to-neon-purple hover:shadow-lg transition-all</span>"&gt;<br/>
+                        &nbsp;&nbsp;Click Me<br/>
+                        &lt;/button&gt;
+                    </div>
+                </div>
+                
+                <div class="mt-4 p-3 bg-blue-900/20 text-blue-200 rounded border border-blue-500/30 text-xs">
+                    💡 <strong>Tip:</strong> Đóng gói class dài ngoằng kia vào một Component tái sử dụng (React/Vue/Astro) để code gọn gàng như Bootstrap nhưng đẹp hơn gấp 10 lần.
+                </div>
+            </div>
+        </div>
+      </section>
+
+      <!-- SECTION: PATTERNS -->
+      <section id="patterns" class="mb-24 scroll-mt-24">
+         <h2 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+          <span class="w-8 h-8 rounded-lg bg-neon-blue flex items-center justify-center text-white text-lg font-bold">4</span>
+          Project Patterns
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- New Project -->
+            <div class="group p-8 rounded-2xl bg-gradient-to-br from-dark-card to-dark-bg border border-dark-border hover:border-neon-cyan/50 transition-all">
+                <div class="h-12 w-12 rounded-full bg-neon-cyan/20 flex items-center justify-center text-neon-cyan mb-6">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">Dự án Mới</h3>
+                <p class="text-gray-400 mb-6">Bắt đầu fresh với bộ khung chuẩn chỉnh ngay từ đầu.</p>
+                
+                <div class="bg-black/50 p-4 rounded-lg border border-gray-800 font-mono text-sm text-gray-300">
+                    <span class="text-green-400">npm</span> create astro@latest<br/>
+                    <span class="text-green-400">npx</span> astro add tailwind<br/>
+                    <span class="text-gray-500"># Copy global.css & config từ ClaudeKit</span>
+                </div>
+            </div>
+
+            <!-- Existing Project -->
+             <div class="group p-8 rounded-2xl bg-gradient-to-br from-dark-card to-dark-bg border border-dark-border hover:border-neon-purple/50 transition-all">
+                <div class="h-12 w-12 rounded-full bg-neon-purple/20 flex items-center justify-center text-neon-purple mb-6">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">Dự án Hiện có</h3>
+                <p class="text-gray-400 mb-6">Nâng cấp giao diện dần dần (Incremental Adoption).</p>
+                
+                <ul class="space-y-3 text-gray-400">
+                    <li class="flex items-start gap-2">
+                        <span class="text-neon-purple mt-1">●</span>
+                        Giữ nguyên layout cũ, chỉ thay thế Header/Footer trước để tạo cảm giác mới.
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-neon-purple mt-1">●</span>
+                        Thay thế font chữ (Inter/Outfit) để hiện đại hóa ngay lập tức.
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-neon-purple mt-1">●</span>
+                        Inject file `global.css` của ClaudeKit và sử dụng song song.
+                    </li>
+                </ul>
+            </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <div class="text-center py-20 border-t border-dark-border">
+          <h2 class="text-3xl font-bold text-white mb-6">Sẵn sàng để Wow người dùng?</h2>
+          <a href="/" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-dark-bg font-bold hover:bg-neon-cyan hover:text-black transition-colors">
+              Quay lại Trang chủ
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </a>
+      </div>
+
+    </div>
+  </div>
+</Layout>
+
+<style>
+/* Smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+</style> 

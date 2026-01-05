@@ -1,0 +1,241 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { agents, agentCategories } from '../data/agents';
+---
+
+<Layout title="Agents" description="Danh sách tất cả AI agents trong ClaudeKit">
+  <section class="py-12 px-4">
+    <div class="max-w-6xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          AI <span class="gradient-text">Agents</span>
+        </h1>
+        <p class="text-gray-400 max-w-2xl mx-auto">
+          Đội ngũ chuyên gia AI làm việc cùng bạn. Mỗi agent có vai trò và khả năng riêng biệt,
+          được thiết kế để xử lý các tác vụ cụ thể.
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-3 gap-4 max-w-xl mx-auto mb-12">
+        <div class="text-center p-4 rounded-xl bg-dark-card border border-dark-border">
+          <div class="text-3xl font-bold text-neon-cyan">{agents.filter(a => a.kit === 'both').length}</div>
+          <div class="text-sm text-gray-500">Shared Agents</div>
+        </div>
+        <div class="text-center p-4 rounded-xl bg-dark-card border border-dark-border">
+          <div class="text-3xl font-bold text-neon-blue">{agents.filter(a => a.kit === 'engineer').length}</div>
+          <div class="text-sm text-gray-500">Engineer Only</div>
+        </div>
+        <div class="text-center p-4 rounded-xl bg-dark-card border border-dark-border">
+          <div class="text-3xl font-bold text-neon-purple">{agents.filter(a => a.kit === 'marketing').length}</div>
+          <div class="text-sm text-gray-500">Marketing Only</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="flex flex-wrap gap-4 mb-8 justify-center">
+        <button data-filter="all" class="filter-btn active px-4 py-2 rounded-lg bg-dark-card border border-dark-border hover:border-neon-cyan/50 transition-all">
+          Tất cả
+        </button>
+        <button data-filter="both" class="filter-btn px-4 py-2 rounded-lg bg-dark-card border border-dark-border hover:border-neon-cyan/50 transition-all">
+          Cả hai kit
+        </button>
+        <button data-filter="engineer" class="filter-btn px-4 py-2 rounded-lg bg-dark-card border border-dark-border hover:border-neon-cyan/50 transition-all">
+          Engineer Kit
+        </button>
+        <button data-filter="marketing" class="filter-btn px-4 py-2 rounded-lg bg-dark-card border border-dark-border hover:border-neon-purple/50 transition-all">
+          Marketing Kit
+        </button>
+      </div>
+
+      <!-- Search -->
+      <div class="max-w-xl mx-auto mb-12">
+        <div class="relative">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Tìm kiếm agents..."
+            class="w-full px-4 py-3 pl-12 rounded-xl bg-dark-card border border-dark-border focus:border-neon-cyan/50 focus:outline-none text-gray-200 placeholder-gray-500"
+          />
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Agents Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {agents.map((agent) => (
+          <div
+            class="agent-card p-6 rounded-xl bg-dark-card border border-dark-border hover:border-neon-purple/30 transition-all card-hover"
+            data-kit={agent.kit}
+            data-name={agent.name.toLowerCase()}
+            id={agent.name}
+          >
+            <div class="flex items-start gap-4 mb-4">
+              <div class="text-4xl">{agent.icon}</div>
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1 flex-wrap">
+                  <h3 class="text-lg font-bold text-white">{agent.name}</h3>
+                  <span class={`text-xs px-2 py-0.5 rounded-full ${agent.kit === 'both' ? 'bg-gray-700 text-gray-300' : agent.kit === 'engineer' ? 'bg-neon-cyan/20 text-neon-cyan' : 'bg-neon-purple/20 text-neon-purple'}`}>
+                    {agent.kit === 'both' ? 'Both' : agent.kit}
+                  </span>
+                </div>
+                <p class="text-sm text-neon-purple">{agent.role}</p>
+              </div>
+            </div>
+
+            <p class="text-gray-400 text-sm mb-4 line-clamp-3">{agent.description}</p>
+
+            <!-- Capabilities -->
+            <div class="mb-4">
+              <span class="text-xs text-gray-500 uppercase tracking-wide">Khả năng:</span>
+              <ul class="mt-2 space-y-1">
+                {agent.capabilities.slice(0, 4).map((cap) => (
+                  <li class="text-xs text-gray-400 flex items-center gap-2">
+                    <span class="w-1 h-1 rounded-full bg-neon-cyan"></span>
+                    {cap}
+                  </li>
+                ))}
+                {agent.capabilities.length > 4 && (
+                  <li class="text-xs text-gray-500">+{agent.capabilities.length - 4} khả năng khác</li>
+                )}
+              </ul>
+            </div>
+
+            <!-- Used by -->
+            {agent.usedBy.length > 0 && (
+              <div>
+                <span class="text-xs text-gray-500 uppercase tracking-wide">Được sử dụng bởi:</span>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  {agent.usedBy.slice(0, 4).map((cmd) => (
+                    <a href={`/commands#${cmd.replace('/', '')}`} class="text-xs px-2 py-1 rounded bg-neon-cyan/10 text-neon-cyan hover:bg-neon-cyan/20 transition-colors font-mono">
+                      {cmd}
+                    </a>
+                  ))}
+                  {agent.usedBy.length > 4 && (
+                    <span class="text-xs px-2 py-1 text-gray-500">+{agent.usedBy.length - 4}</span>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <!-- Agent Orchestration -->
+      <div class="mt-16 p-8 rounded-2xl bg-dark-card border border-dark-border">
+        <h2 class="text-2xl font-bold text-white mb-6 text-center">
+          Cách Agents <span class="gradient-text">phối hợp</span>
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          <!-- Sequential -->
+          <div>
+            <h3 class="text-lg font-semibold text-neon-cyan mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
+              </svg>
+              Sequential Chaining
+            </h3>
+            <p class="text-gray-400 text-sm mb-4">
+              Agents chạy tuần tự khi có dependency. Output của agent này là input của agent tiếp theo.
+            </p>
+            <div class="flex items-center gap-2 text-sm">
+              <span class="px-3 py-1 rounded bg-neon-purple/10 text-neon-purple">planner</span>
+              <span class="text-gray-500">→</span>
+              <span class="px-3 py-1 rounded bg-neon-purple/10 text-neon-purple">researcher</span>
+              <span class="text-gray-500">→</span>
+              <span class="px-3 py-1 rounded bg-neon-purple/10 text-neon-purple">tester</span>
+            </div>
+          </div>
+
+          <!-- Parallel -->
+          <div>
+            <h3 class="text-lg font-semibold text-neon-pink mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
+              Parallel Execution
+            </h3>
+            <p class="text-gray-400 text-sm mb-4">
+              Nhiều agents cùng chạy song song cho các tasks độc lập. Tăng tốc độ xử lý.
+            </p>
+            <div class="space-y-2 text-sm">
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded bg-neon-pink/10 text-neon-pink">researcher #1</span>
+                <span class="text-gray-500">⟨database options⟩</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded bg-neon-pink/10 text-neon-pink">researcher #2</span>
+                <span class="text-gray-500">⟨auth methods⟩</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded bg-neon-pink/10 text-neon-pink">researcher #3</span>
+                <span class="text-gray-500">⟨UI frameworks⟩</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 p-4 rounded-xl bg-dark-bg border border-dark-border">
+          <p class="text-sm text-gray-400">
+            <span class="text-neon-cyan font-semibold">💡 Tip:</span> Agents giao tiếp với nhau qua file system.
+            Reports được lưu trong <code class="text-neon-cyan">./plans/reports/</code> và được đọc bởi agent tiếp theo trong chain.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const agentCards = document.querySelectorAll('.agent-card');
+    const searchInput = document.getElementById('search-input') as HTMLInputElement;
+
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    function filterAgents() {
+      agentCards.forEach((card) => {
+        const kit = card.getAttribute('data-kit');
+        const name = card.getAttribute('data-name') || '';
+        const text = card.textContent?.toLowerCase() || '';
+
+        const matchesFilter = currentFilter === 'all' || kit === currentFilter || (currentFilter === 'both' && kit === 'both');
+        const matchesSearch = searchQuery === '' || name.includes(searchQuery) || text.includes(searchQuery);
+
+        if (matchesFilter && matchesSearch) {
+          (card as HTMLElement).style.display = 'block';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    }
+
+    filterBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach((b) => b.classList.remove('active', 'border-neon-cyan', 'text-neon-cyan'));
+        btn.classList.add('active', 'border-neon-cyan', 'text-neon-cyan');
+        currentFilter = btn.getAttribute('data-filter') || 'all';
+        filterAgents();
+      });
+    });
+
+    searchInput?.addEventListener('input', (e) => {
+      searchQuery = (e.target as HTMLInputElement).value.toLowerCase();
+      filterAgents();
+    });
+
+    if (window.location.hash) {
+      const el = document.querySelector(window.location.hash);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.add('ring-2', 'ring-neon-purple');
+        }, 100);
+      }
+    }
+  </script>
+</Layout>

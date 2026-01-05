@@ -1,0 +1,234 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { skills, skillCategories } from '../data/skills';
+---
+
+<Layout title="Skills" description="Danh sách tất cả skills trong ClaudeKit">
+  <section class="py-12 px-4">
+    <div class="max-w-6xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          <span class="gradient-text">Skills</span> Catalog
+        </h1>
+        <p class="text-gray-400 max-w-2xl mx-auto">
+          Skills cung cấp domain knowledge và scripts cho agents.
+          Mỗi skill chứa references, templates và utilities cho một lĩnh vực cụ thể.
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-3 gap-4 max-w-xl mx-auto mb-12">
+        <div class="text-center p-4 rounded-xl bg-dark-card border border-dark-border">
+          <div class="text-3xl font-bold text-neon-pink">{skills.length}</div>
+          <div class="text-sm text-gray-500">Total Skills</div>
+        </div>
+        <div class="text-center p-4 rounded-xl bg-dark-card border border-dark-border">
+          <div class="text-3xl font-bold text-neon-cyan">{skills.filter(s => s.hasScripts).length}</div>
+          <div class="text-sm text-gray-500">Có Scripts</div>
+        </div>
+        <div class="text-center p-4 rounded-xl bg-dark-card border border-dark-border">
+          <div class="text-3xl font-bold text-neon-purple">{skillCategories.length}</div>
+          <div class="text-sm text-gray-500">Categories</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="flex flex-wrap gap-4 mb-8 justify-center">
+        <button data-filter="all" class="filter-btn active px-4 py-2 rounded-lg bg-dark-card border border-dark-border hover:border-neon-cyan/50 transition-all">
+          Tất cả
+        </button>
+        <button data-filter="both" class="filter-btn px-4 py-2 rounded-lg bg-dark-card border border-dark-border hover:border-neon-cyan/50 transition-all">
+          Cả hai kit
+        </button>
+        <button data-filter="engineer" class="filter-btn px-4 py-2 rounded-lg bg-dark-card border border-dark-border hover:border-neon-cyan/50 transition-all">
+          Engineer Kit
+        </button>
+        <button data-filter="marketing" class="filter-btn px-4 py-2 rounded-lg bg-dark-card border border-dark-border hover:border-neon-purple/50 transition-all">
+          Marketing Kit
+        </button>
+      </div>
+
+      <!-- Search -->
+      <div class="max-w-xl mx-auto mb-12">
+        <div class="relative">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Tìm kiếm skills..."
+            class="w-full px-4 py-3 pl-12 rounded-xl bg-dark-card border border-dark-border focus:border-neon-cyan/50 focus:outline-none text-gray-200 placeholder-gray-500"
+          />
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Skills by Category -->
+      {skillCategories.map((category) => {
+        const categorySkills = skills.filter(s => s.category === category.id);
+        if (categorySkills.length === 0) return null;
+
+        return (
+          <div class="mb-12 category-section" data-category={category.id}>
+            <div class="flex items-center gap-3 mb-6">
+              <div class={`w-4 h-4 rounded-full bg-${category.color}-500`}></div>
+              <h2 class="text-2xl font-bold text-white">{category.name}</h2>
+              <span class="text-sm text-gray-500">({categorySkills.length} skills)</span>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {categorySkills.map((skill) => (
+                <div
+                  class="skill-card p-5 rounded-xl bg-dark-card border border-dark-border hover:border-neon-pink/30 transition-all card-hover"
+                  data-kit={skill.kit}
+                  data-name={skill.name.toLowerCase()}
+                  id={skill.name}
+                >
+                  <div class="flex items-start gap-3 mb-3">
+                    <span class="text-2xl">{skill.icon}</span>
+                    <div class="flex-1">
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <h3 class="font-bold text-white">{skill.name}</h3>
+                        <span class={`text-xs px-2 py-0.5 rounded-full ${skill.kit === 'both' ? 'bg-gray-700 text-gray-300' : skill.kit === 'engineer' ? 'bg-neon-cyan/20 text-neon-cyan' : 'bg-neon-purple/20 text-neon-purple'}`}>
+                          {skill.kit === 'both' ? 'Both' : skill.kit}
+                        </span>
+                        {skill.hasScripts && (
+                          <span class="text-xs px-2 py-0.5 rounded-full bg-neon-pink/20 text-neon-pink">
+                            scripts
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <p class="text-gray-400 text-sm mb-4 line-clamp-2">{skill.description}</p>
+
+                  {skill.usedBy.length > 0 && (
+                    <div>
+                      <span class="text-xs text-gray-500">Sử dụng bởi:</span>
+                      <div class="flex flex-wrap gap-1 mt-1">
+                        {skill.usedBy.slice(0, 3).map((cmd) => (
+                          <a href={`/commands#${cmd.replace('/', '')}`} class="text-xs px-2 py-0.5 rounded bg-dark-hover text-gray-400 hover:text-neon-cyan transition-colors font-mono">
+                            {cmd}
+                          </a>
+                        ))}
+                        {skill.usedBy.length > 3 && (
+                          <span class="text-xs text-gray-500">+{skill.usedBy.length - 3}</span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+
+      <!-- Skill Structure Info -->
+      <div class="mt-16 p-8 rounded-2xl bg-dark-card border border-dark-border">
+        <h2 class="text-2xl font-bold text-white mb-6 text-center">
+          Cấu trúc <span class="gradient-text">Skill</span>
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="text-lg font-semibold text-neon-pink mb-4">📁 Thư mục Skill</h3>
+            <div class="p-4 rounded-lg bg-dark-bg font-mono text-sm">
+              <div class="text-gray-400">.claude/skills/{`{skill-name}`}/</div>
+              <div class="pl-4 text-gray-500">├── <span class="text-neon-cyan">SKILL.md</span> <span class="text-gray-600"># Định nghĩa skill</span></div>
+              <div class="pl-4 text-gray-500">├── <span class="text-neon-purple">references/</span> <span class="text-gray-600"># Tài liệu tham khảo</span></div>
+              <div class="pl-4 text-gray-500">├── <span class="text-neon-pink">scripts/</span> <span class="text-gray-600"># Python/JS scripts</span></div>
+              <div class="pl-4 text-gray-500">└── <span class="text-gray-400">templates/</span> <span class="text-gray-600"># Templates</span></div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold text-neon-cyan mb-4">📋 SKILL.md</h3>
+            <div class="p-4 rounded-lg bg-dark-bg font-mono text-sm text-gray-400">
+              <div class="text-gray-500"># Skill Name</div>
+              <div class="mt-2">## Mô tả</div>
+              <div class="text-gray-600">Skill dùng để làm gì...</div>
+              <div class="mt-2">## Khi nào sử dụng</div>
+              <div class="text-gray-600">Activate khi user cần...</div>
+              <div class="mt-2">## References</div>
+              <div class="text-gray-600">- ref1.md</div>
+              <div class="mt-2">## Scripts</div>
+              <div class="text-gray-600">- script.py</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 p-4 rounded-xl bg-dark-bg border border-dark-border">
+          <p class="text-sm text-gray-400">
+            <span class="text-neon-pink font-semibold">💡 Tip:</span> Khi chạy Python scripts từ skills, sử dụng venv interpreter:
+            <code class="block mt-2 text-neon-cyan">.claude/skills/.venv/bin/python3 scripts/xxx.py</code>
+            <code class="block text-gray-500"># Windows: .claude\skills\.venv\Scripts\python.exe scripts\xxx.py</code>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const skillCards = document.querySelectorAll('.skill-card');
+    const searchInput = document.getElementById('search-input') as HTMLInputElement;
+
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    function filterSkills() {
+      skillCards.forEach((card) => {
+        const kit = card.getAttribute('data-kit');
+        const name = card.getAttribute('data-name') || '';
+        const text = card.textContent?.toLowerCase() || '';
+
+        const matchesFilter = currentFilter === 'all' || kit === currentFilter || (currentFilter === 'both' && kit === 'both');
+        const matchesSearch = searchQuery === '' || name.includes(searchQuery) || text.includes(searchQuery);
+
+        if (matchesFilter && matchesSearch) {
+          (card as HTMLElement).style.display = 'block';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+
+      document.querySelectorAll('.category-section').forEach((section) => {
+        const cards = section.querySelectorAll('.skill-card');
+        let hasVisible = false;
+        cards.forEach((card) => {
+          if ((card as HTMLElement).style.display !== 'none') {
+            hasVisible = true;
+          }
+        });
+        (section as HTMLElement).style.display = hasVisible ? 'block' : 'none';
+      });
+    }
+
+    filterBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach((b) => b.classList.remove('active', 'border-neon-cyan', 'text-neon-cyan'));
+        btn.classList.add('active', 'border-neon-cyan', 'text-neon-cyan');
+        currentFilter = btn.getAttribute('data-filter') || 'all';
+        filterSkills();
+      });
+    });
+
+    searchInput?.addEventListener('input', (e) => {
+      searchQuery = (e.target as HTMLInputElement).value.toLowerCase();
+      filterSkills();
+    });
+
+    if (window.location.hash) {
+      const el = document.querySelector(window.location.hash);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.add('ring-2', 'ring-neon-pink');
+        }, 100);
+      }
+    }
+  </script>
+</Layout>

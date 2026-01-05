@@ -1,0 +1,296 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { commands, categories } from '../data/commands';
+---
+
+<Layout title="Commands" description="Danh sách tất cả slash commands trong ClaudeKit">
+    <div class="fixed inset-0 bg-grid-pattern opacity-30 pointer-events-none -z-10"></div>
+    <div class="fixed inset-0 aurora-bg opacity-40 pointer-events-none -z-10"></div>
+
+    <section class="py-12 px-4 min-h-screen relative z-10">
+    <div class="max-w-6xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-16 animate-fade-in-up">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-6">
+            <span class="text-xs font-medium text-neon-cyan tracking-wide uppercase">Encyclopedia</span>
+        </div>
+        <h1 class="text-5xl md:text-6xl font-black mb-6">
+          Slash <span class="gradient-text glow-text-cyan">Commands</span>
+        </h1>
+        <p class="text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
+          Thư viện lệnh đầy đủ của ClaudeKit. Tìm kiếm, lọc theo Kit và khám phá cách các Agents phối hợp.
+        </p>
+      </div>
+
+      <!-- Controls Container -->
+      <div class="glass-panel p-2 rounded-2xl mb-12 flex flex-col md:flex-row gap-4 items-center sticky top-20 z-40 shadow-2xl backdrop-blur-xl border-white/10 animate-fade-in">
+        
+        <!-- Filters -->
+        <div class="flex p-1 bg-black/20 rounded-xl overflow-x-auto w-full md:w-auto">
+            <button data-filter="all" class="filter-btn active flex-1 md:flex-none px-6 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white transition-all whitespace-nowrap">
+              All Commands
+            </button>
+            <button data-filter="engineer" class="filter-btn flex-1 md:flex-none px-6 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white transition-all whitespace-nowrap flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-neon-cyan"></span> Engineer
+            </button>
+            <button data-filter="marketing" class="filter-btn flex-1 md:flex-none px-6 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white transition-all whitespace-nowrap flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-neon-purple"></span> Marketing
+            </button>
+        </div>
+
+        <!-- Search -->
+        <div class="relative flex-1 w-full">
+            <input
+            type="text"
+            id="search-input"
+            placeholder="Type /command or keyword..."
+            class="w-full px-4 py-2.5 pl-10 rounded-xl bg-white/5 border border-white/10 focus:border-neon-cyan/50 focus:bg-white/10 focus:outline-none text-white placeholder-gray-500 transition-all font-mono text-sm"
+            />
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+        </div>
+      </div>
+
+      <!-- Commands Grid -->
+      <div id="commands-container">
+        {categories.map((category) => {
+            const categoryCommands = commands.filter(c => c.category === category.id);
+            if (categoryCommands.length === 0) return null;
+
+            return (
+            <div class="mb-16 category-section animate-fade-in" data-category={category.id}>
+                <div class="flex items-center gap-4 mb-8 pl-2 border-l-4 border-neon-cyan/50">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                        {category.name}
+                        <span class="px-2 py-0.5 rounded-md bg-white/5 text-xs text-gray-500 font-normal border border-white/5">{categoryCommands.length}</span>
+                    </h2>
+                </div>
+
+                <div class="grid gap-6">
+                {categoryCommands.map((cmd) => (
+                    <div
+                    class="command-card group relative p-6 rounded-2xl glass-panel border border-white/5 hover:border-neon-cyan/30 transition-all spotlight-card overflow-hidden"
+                    data-kit={cmd.kit}
+                    data-name={cmd.name.toLowerCase()}
+                    data-desc={cmd.description.toLowerCase()}
+                    id={cmd.name.replace('/', '')}
+                    >
+                        <!-- Hover Gradient -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-neon-cyan/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+
+                        <div class="flex flex-col lg:flex-row lg:items-start gap-6 relative z-10">
+                            <!-- Left: Command Info -->
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-3 flex-wrap">
+                                    <div class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 font-mono text-lg font-bold text-neon-cyan shadow-[0_0_15px_rgba(0,245,255,0.1)] group-hover:shadow-[0_0_25px_rgba(0,245,255,0.2)] transition-shadow">
+                                        {cmd.name}
+                                    </div>
+                                    <span class={`text-[10px] uppercase font-bold px-2 py-1 rounded border ${
+                                        cmd.kit === 'both' ? 'border-gray-600 text-gray-400 bg-gray-600/10' : 
+                                        cmd.kit === 'engineer' ? 'border-neon-cyan/30 text-neon-cyan bg-neon-cyan/5' : 
+                                        'border-neon-purple/30 text-neon-purple bg-neon-purple/5'
+                                    }`}>
+                                    {cmd.kit === 'both' ? 'GLOBAL' : cmd.kit === 'engineer' ? 'ENGINEER' : 'MARKETING'}
+                                    </span>
+                                </div>
+                                <p class="text-gray-300 mb-6 text-sm leading-relaxed">{cmd.description}</p>
+
+                                <!-- Workflow Step -->
+                                <div class="mb-6 p-4 rounded-xl bg-white/5 border border-white/5">
+                                    <div class="flex items-center gap-2 mb-2 text-xs text-gray-500 uppercase tracking-widest font-bold">
+                                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                                        Workflow Logic
+                                    </div>
+                                    <p class="text-sm text-gray-400 font-mono">{cmd.workflow}</p>
+                                </div>
+
+                                <!-- Subcommands -->
+                                {cmd.subcommands && cmd.subcommands.length > 0 && (
+                                    <div class="flex flex-wrap gap-2">
+                                    {cmd.subcommands.map((sub) => (
+                                        <code class="text-[10px] px-2 py-1 rounded border border-white/10 bg-white/5 text-gray-400 font-mono hover:border-white/20 transition-colors">
+                                        {sub}
+                                        </code>
+                                    ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            <!-- Right: Agents & Skills -->
+                            <div class="lg:w-64 flex flex-col gap-4">
+                                <div class="p-4 rounded-xl bg-black/20 border border-white/5 h-full">
+                                    <!-- Agents -->
+                                    <div class="mb-4">
+                                        <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Active Agents</div>
+                                        <div class="flex flex-wrap gap-1.5">
+                                        {cmd.agents.length > 0 ? cmd.agents.map((agent) => (
+                                            <a href={`/agents#${agent}`} class="group/tag relative inline-flex items-center justify-center w-8 h-8 rounded-full bg-neon-purple/10 border border-neon-purple/20 text-neon-purple hover:bg-neon-purple hover:text-black transition-all" title={agent}>
+                                                <span class="text-xs font-bold">{agent[0].toUpperCase()}</span>
+                                            </a>
+                                        )) : (
+                                            <span class="text-xs text-gray-600 italic">No agents</span>
+                                        )}
+                                        </div>
+                                    </div>
+
+                                    <!-- Skills -->
+                                    <div>
+                                        <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Required Skills</div>
+                                        <div class="flex flex-wrap gap-1.5">
+                                        {cmd.skills.length > 0 ? cmd.skills.map((skill) => (
+                                            <a href={`/skills#${skill}`} class="text-[10px] px-2 py-1 rounded bg-neon-pink/5 border border-neon-pink/10 text-neon-pink hover:bg-neon-pink/20 transition-colors">
+                                            {skill}
+                                            </a>
+                                        )) : (
+                                            <span class="text-xs text-gray-600 italic">No external skills</span>
+                                        )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+                </div>
+            </div>
+            );
+        })}
+      </div>
+      
+        <!-- Empty State (Hidden by default) -->
+        <div id="empty-state" class="hidden py-20 text-center">
+            <div class="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">No commands found</h3>
+            <p class="text-gray-400">Try adjusting your search or filters.</p>
+            <button onclick="resetFilters()" class="mt-6 px-6 py-2 rounded-full bg-neon-cyan text-black font-bold hover:bg-white transition-colors">
+                Reset all filters
+            </button>
+        </div>
+
+    </div>
+  </section>
+
+  <script is:inline>
+    // Robust Filtering Logic
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const searchInput = document.getElementById('search-input');
+    
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    function filterCommands() {
+      const cards = document.querySelectorAll('.command-card');
+      const categories = document.querySelectorAll('.category-section');
+      let totalVisible = 0;
+
+      // 1. Filter individual cards
+      cards.forEach(card => {
+        const kit = card.dataset.kit;
+        const name = card.dataset.name;
+        const desc = card.dataset.desc;
+        
+        // Filter logic
+        const matchesKit = currentFilter === 'all' || kit === currentFilter || (currentFilter === 'both' && kit === 'both') || (kit === 'both'); 
+            // Note: If kit is 'both', it should show up in 'engineer' and 'marketing' filters too potentially? 
+            // Let's stick to strict: 'both' shows in 'all', or specifically 'both' filter?
+            // User requested: "Marketing Kit" filter. A specific marketing command has kit="marketing".
+            // Let's refine:
+            // If filter is 'engineer', show 'engineer' AND 'both'.
+            // If filter is 'marketing', show 'marketing' AND 'both'.
+        
+        let refinedKitMatch = false;
+        if (currentFilter === 'all') refinedKitMatch = true;
+        else if (currentFilter === 'engineer') refinedKitMatch = (kit === 'engineer' || kit === 'both');
+        else if (currentFilter === 'marketing') refinedKitMatch = (kit === 'marketing' || kit === 'both');
+        
+        const matchesSearch = !searchQuery || name.includes(searchQuery) || desc.includes(searchQuery);
+
+        if (refinedKitMatch && matchesSearch) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+      });
+
+      // 2. Hide empty categories
+      categories.forEach(category => {
+          // Check if any children are NOT visible (check display style)
+          const visibleCards = Array.from(category.querySelectorAll('.command-card')).filter(c => c.style.display !== 'none');
+          
+          if (visibleCards.length > 0) {
+              category.style.display = 'block';
+              totalVisible += visibleCards.length;
+          } else {
+              category.style.display = 'none';
+          }
+      });
+
+      // 3. Toggle Empty State
+      const emptyState = document.getElementById('empty-state');
+      if (totalVisible === 0) {
+          emptyState.style.display = 'block';
+          emptyState.classList.remove('hidden'); // Ensure hidden class is gone if it was there
+      } else {
+          emptyState.style.display = 'none';
+          emptyState.classList.add('hidden');
+      }
+    }
+
+    // Event Listeners
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update UI
+            filterBtns.forEach(b => {
+                b.classList.remove('active', 'bg-white/10', 'text-white');
+                b.classList.add('text-gray-400');
+            });
+            btn.classList.add('active', 'bg-white/10', 'text-white');
+            btn.classList.remove('text-gray-400');
+
+            // Apply filter
+            currentFilter = btn.dataset.filter;
+            filterCommands();
+        });
+    });
+
+    searchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value.toLowerCase();
+        filterCommands();
+    });
+
+    window.resetFilters = () => {
+        searchQuery = '';
+        currentFilter = 'all';
+        searchInput.value = '';
+        
+        // Reset UI buttons
+        filterBtns.forEach(b => b.classList.remove('active', 'bg-white/10', 'text-white'));
+        document.querySelector('[data-filter="all"]').classList.add('active', 'bg-white/10', 'text-white');
+        
+        filterCommands();
+    }
+
+    // Spotlight effect
+    document.addEventListener('mousemove', (e) => {
+        const cards = document.querySelectorAll('.spotlight-card');
+        cards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
+    // Check URL Params
+    const urlParams = new URLSearchParams(window.location.search);
+    const kitParam = urlParams.get('kit');
+    if (kitParam) {
+        const btn = document.querySelector(`[data-filter="${kitParam}"]`);
+        if (btn) btn.click();
+    }
+  </script>
+</Layout>
