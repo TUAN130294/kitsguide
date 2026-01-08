@@ -1,3 +1,8 @@
+export interface Subcommand {
+  name: string;
+  description: string;
+}
+
 export interface Command {
   name: string;
   description: string;
@@ -6,7 +11,7 @@ export interface Command {
   agents: string[];
   skills: string[];
   workflow: string;
-  subcommands?: string[];
+  subcommands?: Subcommand[];
   example?: string;
 }
 
@@ -20,7 +25,13 @@ export const commands: Command[] = [
     agents: ['planner', 'researcher'],
     skills: ['planning'],
     workflow: 'Phân tích task → Quyết định fast/hard → Tạo plan chi tiết',
-    subcommands: ['/plan:fast', '/plan:hard', '/plan:validate', '/plan:ci', '/plan:archive'],
+    subcommands: [
+      { name: '/plan:fast', description: 'Lên plan nhanh cho task đơn giản, ít bước' },
+      { name: '/plan:hard', description: 'Lên plan chi tiết cho task phức tạp, nhiều bước' },
+      { name: '/plan:validate', description: 'Kiểm tra và xác nhận plan hiện tại' },
+      { name: '/plan:ci', description: 'Tạo plan cho CI/CD pipeline' },
+      { name: '/plan:archive', description: 'Lưu trữ plan đã hoàn thành' }
+    ],
     example: '/plan "implement user authentication"'
   },
   {
@@ -31,7 +42,11 @@ export const commands: Command[] = [
     agents: ['researcher', 'planner', 'ui-ux-designer', 'tester', 'code-reviewer', 'project-manager', 'docs-manager'],
     skills: ['ai-multimodal', 'design-system', 'planning'],
     workflow: 'Hỏi → Nghiên cứu → Lên kế hoạch → Code → Test → Review → Docs → Onboarding',
-    subcommands: ['/cook:auto', '/cook:auto:fast', '/cook:auto:parallel'],
+    subcommands: [
+      { name: '/cook:auto', description: 'Tự động chạy toàn bộ workflow không cần xác nhận từng bước' },
+      { name: '/cook:auto:fast', description: 'Auto mode + skip các bước không cần thiết (nhanh hơn)' },
+      { name: '/cook:auto:parallel', description: 'Auto mode + chạy nhiều tasks song song (nhanh nhất)' }
+    ],
     example: '/cook "add dark mode toggle"'
   },
   {
@@ -42,7 +57,11 @@ export const commands: Command[] = [
     agents: ['tester', 'code-reviewer', 'project-manager', 'docs-manager', 'debugger'],
     skills: ['debugging', 'code-review'],
     workflow: 'Detect plan → Phân tích → Implement → Test → Review → User approval',
-    subcommands: ['/code:auto', '/code:no-test', '/code:parallel'],
+    subcommands: [
+      { name: '/code:auto', description: 'Tự động code không cần xác nhận từng bước' },
+      { name: '/code:no-test', description: 'Chỉ code, bỏ qua bước chạy test' },
+      { name: '/code:parallel', description: 'Code nhiều files/features song song' }
+    ],
     example: '/code ./plans/240115-auth-feature/'
   },
   {
@@ -53,7 +72,11 @@ export const commands: Command[] = [
     agents: ['git-manager', 'researcher', 'planner', 'ui-ux-designer', 'tester', 'code-reviewer', 'docs-manager', 'project-manager'],
     skills: ['ai-multimodal', 'chrome-devtools', 'assets-organizing', 'design-system'],
     workflow: 'Git init → Research → Tech stack → Design → Implement → Test → Docs',
-    subcommands: ['/bootstrap:auto', '/bootstrap:auto:fast', '/bootstrap:auto:parallel'],
+    subcommands: [
+      { name: '/bootstrap:auto', description: 'Tự động setup project không cần xác nhận từng bước' },
+      { name: '/bootstrap:auto:fast', description: 'Auto mode + dùng template có sẵn (nhanh hơn)' },
+      { name: '/bootstrap:auto:parallel', description: 'Auto mode + setup nhiều phần song song (nhanh nhất)' }
+    ],
     example: '/bootstrap "e-commerce platform with Next.js"'
   },
 
@@ -66,7 +89,16 @@ export const commands: Command[] = [
     agents: ['debugger', 'tester', 'code-reviewer'],
     skills: ['debugging'],
     workflow: 'Phân tích loại lỗi → Route đến command chuyên biệt',
-    subcommands: ['/fix:fast', '/fix:hard', '/fix:types', '/fix:ui', '/fix:test', '/fix:logs', '/fix:ci', '/fix:parallel'],
+    subcommands: [
+      { name: '/fix:fast', description: 'Sửa nhanh lỗi đơn giản, rõ ràng' },
+      { name: '/fix:hard', description: 'Debug sâu cho lỗi phức tạp, khó tìm' },
+      { name: '/fix:types', description: 'Sửa lỗi TypeScript/type errors' },
+      { name: '/fix:ui', description: 'Sửa lỗi giao diện, CSS, responsive' },
+      { name: '/fix:test', description: 'Sửa test cases bị fail' },
+      { name: '/fix:logs', description: 'Phân tích logs để tìm và sửa lỗi' },
+      { name: '/fix:ci', description: 'Sửa lỗi CI/CD pipeline' },
+      { name: '/fix:parallel', description: 'Sửa nhiều lỗi độc lập cùng lúc' }
+    ],
     example: '/fix "login button not working"'
   },
   {
@@ -165,7 +197,9 @@ export const commands: Command[] = [
     agents: ['scout', 'Explore'],
     skills: [],
     workflow: 'Spawn parallel scouts → Search codebase → Report kết quả',
-    subcommands: ['/scout:ext'],
+    subcommands: [
+      { name: '/scout:ext', description: 'Mở rộng tìm kiếm ra external resources, docs' }
+    ],
     example: '/scout "payment integration files"'
   },
   {
@@ -198,7 +232,12 @@ export const commands: Command[] = [
     agents: ['campaign-manager', 'funnel-architect', 'analytics-analyst', 'campaign-debugger'],
     skills: ['campaign-management', 'creativity', 'assets-organizing'],
     workflow: 'Parse action → Create/Status/Analyze campaigns',
-    subcommands: ['/campaign:create', '/campaign:status', '/campaign:analyze', '/campaign:email'],
+    subcommands: [
+      { name: '/campaign:create', description: 'Tạo chiến dịch marketing mới' },
+      { name: '/campaign:status', description: 'Xem trạng thái các chiến dịch đang chạy' },
+      { name: '/campaign:analyze', description: 'Phân tích hiệu quả chiến dịch' },
+      { name: '/campaign:email', description: 'Tạo email sequence cho chiến dịch' }
+    ],
     example: '/campaign:create "Black Friday Sale"'
   },
   {
@@ -209,7 +248,10 @@ export const commands: Command[] = [
     agents: ['email-wizard', 'copywriter'],
     skills: ['email-marketing', 'creativity', 'copywriting', 'assets-organizing'],
     workflow: 'Parse type → Gather context → Create email → Optimize',
-    subcommands: ['/email:flow', '/email:sequence'],
+    subcommands: [
+      { name: '/email:flow', description: 'Tạo email automation flow' },
+      { name: '/email:sequence', description: 'Tạo chuỗi email drip campaign' }
+    ],
     example: '/email newsletter "January product updates"'
   },
   {
@@ -230,7 +272,12 @@ export const commands: Command[] = [
     agents: ['seo-specialist', 'attraction-specialist'],
     skills: ['seo-optimization', 'assets-organizing'],
     workflow: 'Audit/Keywords/Optimize workflows',
-    subcommands: ['/seo:audit', '/seo:keywords', '/seo:optimize', '/seo:pseo'],
+    subcommands: [
+      { name: '/seo:audit', description: 'Audit toàn diện SEO của website' },
+      { name: '/seo:keywords', description: 'Nghiên cứu và phân tích từ khóa' },
+      { name: '/seo:optimize', description: 'Tối ưu SEO cho content cụ thể' },
+      { name: '/seo:pseo', description: 'Programmatic SEO - tạo pages hàng loạt' }
+    ],
     example: '/seo:audit https://example.com'
   },
   {
@@ -241,7 +288,11 @@ export const commands: Command[] = [
     agents: ['funnel-architect', 'sale-enabler', 'analytics-analyst'],
     skills: ['campaign-management', 'analytics', 'assets-organizing'],
     workflow: 'Design/Analyze/Optimize funnels',
-    subcommands: ['/funnel:design', '/funnel:analyze', '/funnel:optimize'],
+    subcommands: [
+      { name: '/funnel:design', description: 'Thiết kế funnel mới từ đầu' },
+      { name: '/funnel:analyze', description: 'Phân tích hiệu quả funnel hiện tại' },
+      { name: '/funnel:optimize', description: 'Tối ưu conversion rate của funnel' }
+    ],
     example: '/funnel:design lead-magnet'
   },
   {
@@ -252,7 +303,12 @@ export const commands: Command[] = [
     agents: ['researcher', 'attraction-specialist', 'seo-specialist'],
     skills: ['seo-optimization', 'content-marketing', 'assets-organizing'],
     workflow: 'Parse action → Analyze/Content gap/SEO comparison',
-    subcommands: ['/competitor:analyze', '/competitor:content', '/competitor:seo', '/competitor:list'],
+    subcommands: [
+      { name: '/competitor:analyze', description: 'Phân tích tổng quan đối thủ' },
+      { name: '/competitor:content', description: 'So sánh chiến lược content' },
+      { name: '/competitor:seo', description: 'So sánh SEO và backlinks' },
+      { name: '/competitor:list', description: 'Liệt kê tất cả đối thủ đã track' }
+    ],
     example: '/competitor:analyze https://competitor.com'
   },
   {
@@ -273,7 +329,9 @@ export const commands: Command[] = [
     agents: ['analytics-analyst', 'funnel-architect'],
     skills: ['analytics'],
     workflow: 'Data gathering → Analysis → Insights → Report',
-    subcommands: ['/analyze:report'],
+    subcommands: [
+      { name: '/analyze:report', description: 'Tạo báo cáo chi tiết với insights' }
+    ],
     example: '/analyze traffic'
   },
 
@@ -286,7 +344,15 @@ export const commands: Command[] = [
     agents: ['ui-ux-designer'],
     skills: ['design', 'brand-guidelines', 'design-system', 'ui-styling'],
     workflow: 'Route đến brand-guidelines, design-system, hoặc ui-styling',
-    subcommands: ['/design:generate', '/design:screenshot', '/design:describe', '/design:fast', '/design:good', '/design:3d', '/design:video'],
+    subcommands: [
+      { name: '/design:generate', description: 'Tạo hình ảnh/illustration với AI' },
+      { name: '/design:screenshot', description: 'Chụp screenshot và phân tích UI' },
+      { name: '/design:describe', description: 'Mô tả design từ hình ảnh' },
+      { name: '/design:fast', description: 'Tạo design nhanh, chất lượng cơ bản' },
+      { name: '/design:good', description: 'Tạo design chất lượng cao, nhiều iterations' },
+      { name: '/design:3d', description: 'Tạo assets 3D' },
+      { name: '/design:video', description: 'Tạo video/animation' }
+    ],
     example: '/design:generate "hero section illustration"'
   },
   {
@@ -401,7 +467,13 @@ export const commands: Command[] = [
     agents: ['researcher', 'Explore'],
     skills: ['skill-creator', 'claude-code', 'docs-seeker'],
     workflow: 'Clarify → Research → Create SKILL.md → Create references',
-    subcommands: ['/skill:add', '/skill:update', '/skill:plan', '/skill:optimize', '/skill:fix-logs'],
+    subcommands: [
+      { name: '/skill:add', description: 'Thêm skill có sẵn vào project' },
+      { name: '/skill:update', description: 'Cập nhật skill đã có' },
+      { name: '/skill:plan', description: 'Lên kế hoạch tạo skill mới' },
+      { name: '/skill:optimize', description: 'Tối ưu performance của skill' },
+      { name: '/skill:fix-logs', description: 'Sửa lỗi skill dựa trên logs' }
+    ],
     example: '/skill:create "stripe-integration" "Payment integration skill"'
   },
   {
@@ -424,7 +496,11 @@ export const commands: Command[] = [
     agents: [],
     skills: ['s3-client'],
     workflow: 'Check config → Upload file → Return URL',
-    subcommands: ['/storage:sync', '/storage:list', '/storage:url'],
+    subcommands: [
+      { name: '/storage:sync', description: 'Đồng bộ folder local với cloud storage' },
+      { name: '/storage:list', description: 'Liệt kê files trong storage' },
+      { name: '/storage:url', description: 'Lấy public URL của file' }
+    ],
     example: '/storage:upload ./assets/hero.png'
   },
 
